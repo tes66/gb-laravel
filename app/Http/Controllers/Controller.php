@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use phpDocumentor\Reflection\Types\Static_;
 
 class Controller extends BaseController
 {
@@ -16,123 +17,124 @@ class Controller extends BaseController
         return [
             [
                 'id' => 1,
-                'category' => 'allgames',
                 'title' => '40 МИНУТ ГЕЙМПЛЕЯ СЮЖЕТНОГО РЕЖИМА GRID LEGENDS',
                 'description' => ' В свежем 40-минутном ролике разработчики сосредоточились на сюжетном режиме Driven to Glory («Путь к славе»)',
                 'author' => 'stopgame',
                 'category_id' => 1,
                 'created_at' => now()
+
+
             ],
             [
                 'id' => 2,
-                'category' => 'allgames',
                 'title' => 'РЕМЕЙК WARCRAFT III: RE-REFORGED',
                 'description' => 'В 2018 году Blizzard анонсировала Warcraft III: Reforged и воодушевила сообщество. Однако по пути обновлённая стратегия растеряла весь свой шарм и ряд обещанных функций.',
                 'author' => 'stopgame',
+                'category_id' => 1,
                 'created_at' => now()
             ],
             [
                 'id' => 3,
-                'category' => 'allgames',
                 'title' => 'В HALO INFINITE ПОЗВОЛЯТ ЗАРАБАТЫВАТЬ ДОНАТНУЮ ВАЛЮТУ',
                 'description' => 'Комьюнити-менеджеры 343 Industries озвучили ещё несколько исправлений для мультиплеера Halo Infinite — их вводят, чтобы бесплатная игра не казалась такой дорогой.',
-                'author' => 'ТАСС',
+                'author' => 'stopgame',
+                'category_id' => 1,
                 'created_at' => now()
             ],
             [
                 'id' => 4,
-                'category' => 'linux',
                 'title' => 'Wine 7.0',
                 'description' => 'Команда Wine с гордостью сообщает о выходе нового стабильного релиза Wine 7.0.',
                 'author' => 'linux.org',
+                'category_id' => 2,
                 'created_at' => now()
             ],
             [
                 'id' => 5,
-                'category' => 'linux',
                 'title' => 'Surge XT 1.0.0',
                 'description' => 'Выпущена первая стабильная версия свободного (GPLv3+) программного синтезатора Surge XT.',
                 'author' => 'linux.org',
+                'category_id' => 2,
                 'created_at' => now()
             ],
             [
                 'id' => 6,
-                'category' => 'linux',
                 'title' => 'ONLYOFFICE 7.0',
                 'description' => 'Одновременно с ONLYOFFICE Docs состоялся релиз ONLYOFFICE DesktopEditors, который представляет ту же функциональность, но в виде самостоятельного десктопного приложения.',
                 'author' => 'linux.org',
+                'category_id' => 2,
                 'created_at' => now()
             ],
             [
                 'id' => 7,
-                'category' => 'music',
-                'title' => 'Цена на газ в Европе выросла выше $650 за тысячу кубометров',
-                'description' => 'Стоимость газа в Европе в понедельник достигла нового рекорда – 53,68 доллара за МВт ч, или 654,1 доллара за 1 тысячу кубометров, согласно данным лондонской биржи ICE.',
-                'author' => 'Smotrim.ru',
+                'title' => 'Новый альбом The Weeknd',
+                'description' => 'В первую же неделю после релиза пластинка возглавила альбомный чарт Apple Music в России.',
+                'author' => 'intermedia.ru',
+                'category_id' => 3,
                 'created_at' => now()
             ],
             [
                 'id' => 8,
-                'category' => 'music',
-                'title' => 'Новый альбом The Weeknd',
-                'description' => 'В первую же неделю после релиза пластинка возглавила альбомный чарт Apple Music в России.',
+                'title' => 'Представлены логотип и слоган Евровидения-2022',
+                'description' => '"Дамы и господа, представляем "красивый" слоган и тематическое оформление #Евровидения 2022 года. Мы рады представить логотип Turin 2022, а также новый слоган — "Звук красоты", — говорится в сообщении.',
                 'author' => 'intermedia.ru',
+                'category_id' => 3,
                 'created_at' => now()
             ],
             [
                 'id' => 9,
-                'category' => 'music',
-                'title' => 'Загородная недвижимость в России за год подорожала в среднем на 18%',
-                'description' => 'Средняя стоимость дома в продаже в целом по России составляет в конце августа 7,08 млн рублей против 6,71 млн в начале лета (+5%) и 5,99 млн рублей год назад (+18%)", - отмечают эксперты.',
-                'author' => 'intermedia.ru',
+                'title' => 'Майлз Кейн заявил, что у него есть невыпущенный альбом с Ланой Дель Рей',
+                'description' => 'Британский рок-исполнитель Майлз Кейн рассказал, что у него и Ланы Дель Рей (Элизабет Грант) есть совместный неизданный материал на целый альбом. Об этом 20 января информирует портал NME.',
+                'author' => 'NME',
+                'category_id' => 3,
                 'created_at' => now()
             ],
             [
                 'id' => 10,
-                'category' => 'cinema',
                 'title' => 'Какие лучшие сериалы стоит посмотреть во второй половине января 2022 года',
                 'description' => '"Позолоченный век" (HBO) - известный сценарист и создатель "Аббатства Даунтон" Джулиан Феллоуз готов представить новую историческую драму',
                 'author' => 'kinonews.ru',
+                'category_id' => 4,
                 'created_at' => now()
             ],
             [
                 'id' => 11,
-                'category' => 'cinema',
                 'title' => 'Все прошло хорошо',
                 'description' => 'Когда у 85-летнего Андре случается инсульт, Эммануэль спешит к постели отца. Больной и наполовину парализованный на больничной койке',
                 'author' => 'kinonews.ru',
+                'category_id' => 4,
                 'created_at' => now()
             ],
             [
                 'id' => 12,
-                'category' => 'cinema',
-                'title' => 'Боевик «Шан-Чи и легенда десяти колец» стал лидером российского проката',
-                'description' => 'Теперь в активе фильма с Райаном Рейнольдсом в главной роли $147,4 млн международных сборов и $239,2 млн общемировых.',
-                'author' => 'Кинобизнес сегодня',
+                'title' => 'Самые кассовые фильмы в мировом кинопрокате в 2020 году',
+                'description' => '1 место – "Восемь сотен" (The Eight Hundred), $461,3 млн 2 место – "Плохие парни навсегда" (Bad Boys for Life), $426,5 млн 3 место – "Довод" (Tenet), $362,6 млн',
+                'author' => 'kinonews.ru',
+                'category_id' => 4,
                 'created_at' => now()
             ],
             [
                 'id' => 13,
-                'category' => 'technologies',
-                'title' => 'WhatsApp 1 ноября прекратит поддержку устройств с устаревшими версиями Android и iOS',
-                'description' => 'В WhatsApp рекомендуют владельцам старых смартфонов обновить устройство или сохранить историю чатов до отключения, чтобы сохранить личные данные пользователя.',
-                'author' => 'РИА Новости',
+                'title' => 'Российские ученые дают второе дыхание углеводородной энергетике',
+                'description' => 'В основе использующейся в углеводородной энергетике новейшей технологии химического циклирования с кислородной аккумуляцией лежат так называемые CLOU-процессы',
+                'author' => 'naukatehnika.com',
+                'category_id' => 5,
                 'created_at' => now()
             ],
             [
                 'id' => 14,
-                'category' => 'technologies',
-                'title' => 'AllMyBlog обвинил «Яндекс» в краже идеи при создании сервиса перевода видео',
-                'description' => 'Непубличное акционерное общество «Оллмай.блог» подало на «Яндекс» в Арбитражный суд Москвы.',
-                'author' => 'Компания',
+                'title' => 'Ан-225 «Мрия». Нужен ли пассажирский гигант?',
+                'description' => '«Мрию» спроектировали и построили в конце 1980-х с одной единственной целью: требовалось создание авиатранспортной системы для проекта многоразового космического корабля «Буран».',
+                'author' => 'naukatehnika.com',
+                'category_id' => 5,
                 'created_at' => now()
             ],
             [
                 'id' => 15,
-                'category' => 'technologies',
-                'title' => 'TSMC подняла цены на изготовление чипов для Apple меньше, чем для других',
-                'description' => 'Лу Синчжи отмечает, что Apple обеспечивает более 20% доходов TSMC, однако прибыль составляет менее 20%, а валовая маржа продолжает опускаться ниже средней.',
-                'author' => 'iXBT.com',
+                'title' => 'Вечный двигатель» Капитанова.',
+                'description' => 'В статье автор рассказал об упрощенной модели своего изобретения. Давайте рассмотрим выкладки автора. НиТ предлагат обсудить прочитанное, оставляйте свои мнения в комментариях.',
+                'author' => 'naukatehnika.com',
+                'category_id' => 5,
                 'created_at' => now()
             ],
         ];
@@ -142,24 +144,34 @@ class Controller extends BaseController
     {
         return [
             [
+                'id' => '1',
                 'title' => 'Все про игры',
-                'url' => 'allgames'
+                'slag' => 'allgames'
             ],
             [
+                'id' => '2',
                 'title' => 'Линукс',
-                'url' => 'linux'
+                'slag' => 'linux'
             ],
             [
+                'id' => '3',
                 'title' => 'Музыка',
-                'url' => 'music'
+                'slag' => 'music'
             ],
             [
+                'id' => '4',
                 'title' => 'Фильмы',
-                'url' => 'cinema'
+                'slag' => 'cinema'
             ],
             [
+                'id' => '5',
                 'title' => 'Технологии',
-                'url' => 'technologies'
+                'slag' => 'technologies'
+            ],
+            [
+                'id' => '6',
+                'title' => 'Наука',
+                'slag' => 'science'
             ]
         ];
     }
@@ -176,9 +188,13 @@ class Controller extends BaseController
     protected function getCategorySearch(string $item)
     {
         $data = [];
-        foreach (static::getNews() as $news) {
-            if ($news['category'] == $item) {
-                array_push($data, $news);
+        foreach (static::getCategory() as $category){
+            if ($category['slag'] == $item){
+                foreach (static::getNews() as $news) {
+                    if ($news['category_id'] == $category['id']) {
+                        array_push($data, $news);
+                    }
+                }
             }
         }
         return $data;
