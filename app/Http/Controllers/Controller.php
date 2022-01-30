@@ -6,7 +6,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
-use phpDocumentor\Reflection\Types\Static_;
+
 
 class Controller extends BaseController
 {
@@ -144,32 +144,32 @@ class Controller extends BaseController
     {
         return [
             [
-                'id' => '1',
+                'id' => 1,
                 'title' => 'Все про игры',
                 'slag' => 'allgames'
             ],
             [
-                'id' => '2',
+                'id' => 2,
                 'title' => 'Линукс',
                 'slag' => 'linux'
             ],
             [
-                'id' => '3',
+                'id' => 3,
                 'title' => 'Музыка',
                 'slag' => 'music'
             ],
             [
-                'id' => '4',
+                'id' => 4,
                 'title' => 'Фильмы',
                 'slag' => 'cinema'
             ],
             [
-                'id' => '5',
+                'id' => 5,
                 'title' => 'Технологии',
                 'slag' => 'technologies'
             ],
             [
-                'id' => '6',
+                'id' => 6,
                 'title' => 'Наука',
                 'slag' => 'science'
             ]
@@ -181,6 +181,15 @@ class Controller extends BaseController
         foreach (static::getNews() as $news) {
             if ($news['id'] == $id) {
                 return $news;
+            }
+        }
+    }
+
+    protected function getCategoryOne(int $id)
+    {
+        foreach (static::getCategory() as $category) {
+            if ($category['id'] == $id) {
+                return $category;
             }
         }
     }
@@ -198,5 +207,15 @@ class Controller extends BaseController
             }
         }
         return $data;
+    }
+
+    protected function countNews()
+    {
+        return count(static::getNews());
+    }
+
+    protected function countCategory()
+    {
+        return count(static::getCategory());
     }
 }

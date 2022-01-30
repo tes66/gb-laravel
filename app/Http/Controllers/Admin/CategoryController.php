@@ -14,7 +14,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('admin.category.index')->with('category', $this->getCategory());
+        return view('admin.category.index')
+            ->with('category', $this->getCategory())
+            ->with('newsCount', $this->countNews())
+            ->with('categoryCount', $this->countCategory());
     }
 
     /**
@@ -24,7 +27,9 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.category.create');
+        return view('admin.category.create')
+            ->with('newsCount', $this->countNews())
+            ->with('categoryCount', $this->countCategory());
     }
 
     /**
@@ -35,7 +40,15 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => ['required', 'string', 'min:3'],
+            'slag' => ['required', 'string', 'min:3']
+        ],[],
+            [
+                'title' => 'Название категории',
+                'slag' => 'имя URL'
+            ]);
+        return json_encode(['created' => 'запись прошла успешно']);
     }
 
     /**
@@ -55,9 +68,12 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id)
     {
-        //
+        return view('admin.category.edit')
+            ->with('category', $this->getCategoryOne($id))
+            ->with('newsCount', $this->countNews())
+            ->with('categoryCount', $this->countCategory());
     }
 
     /**

@@ -14,7 +14,11 @@ class NewsController extends Controller
      */
     public function index()
     {
-        return view('admin.news.index')->with('news', $this->getNews())->with('category', $this->getCategory());
+        return view('admin.news.index')
+            ->with('news', $this->getNews())
+            ->with('category', $this->getCategory())
+            ->with('newsCount', $this->countNews())
+            ->with('categoryCount', $this->countCategory());
     }
 
     /**
@@ -24,7 +28,10 @@ class NewsController extends Controller
      */
     public function create()
     {
-        return view('admin.news.create')->with('category', $this->getCategory());
+        return view('admin.news.create')
+            ->with('category', $this->getCategory())
+            ->with('newsCount', $this->countNews())
+            ->with('categoryCount', $this->countCategory());
     }
 
     /**
@@ -35,7 +42,18 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => ['required', 'string', 'min:5'],
+            'description' => ['required', 'string', 'min:50'],
+            'author' => ['required', 'string', 'min:2']
+        ],[],
+            [
+                'title' => 'Название новости',
+                'description' => 'Текст новости',
+                'author' => 'Автор'
+            ]);
+
+        return json_encode(['created' => 'запись прошла успешно']);
     }
 
     /**
@@ -57,7 +75,12 @@ class NewsController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('admin.news.edit')
+            ->with('news', $this->getNews())
+            ->with('category', $this->getCategory())
+            ->with('newsCount', $this->countNews())
+            ->with('categoryCount', $this->countCategory())
+            ->with('new', $this->getNewOne($id));
     }
 
     /**
