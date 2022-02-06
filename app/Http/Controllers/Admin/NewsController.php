@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\News;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class NewsController extends Controller
 {
@@ -16,11 +17,14 @@ class NewsController extends Controller
      */
     public function index()
     {
+        $news = new News();
+        $category = new Category();
+
         return view('admin.news.index')
-            ->with('news', News::with('category')->paginate(10))
-            ->with('category', Category::all())
-            ->with('newsCount', count(News::all()))
-            ->with('categoryCount', count(Category::all()));
+            ->with('news', $news->getNews())
+            ->with('category', $category->getCategory())
+            ->with('newsCount', $news->countNews())
+            ->with('categoryCount', $category->countCategory());
     }
 
     /**
@@ -30,10 +34,13 @@ class NewsController extends Controller
      */
     public function create()
     {
+        $news = new News();
+        $category = new Category();
+
         return view('admin.news.create')
-            ->with('category', Category::all())
-            ->with('newsCount', count(News::all()))
-            ->with('categoryCount', count(Category::all()));
+            ->with('category', $category->getCategory())
+            ->with('newsCount', $news->countNews())
+            ->with('categoryCount', $category->countCategory());
     }
 
     /**
@@ -42,34 +49,20 @@ class NewsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, News $news)
+    public function store(Request $request)
     {
         $request->validate([
-            'category_id' => ['required', 'int'],
             'title' => ['required', 'string', 'min:5'],
             'description' => ['required', 'string', 'min:50'],
             'author' => ['required', 'string', 'min:2']
         ],[],
             [
-                'category_id' => 'Название категории',
                 'title' => 'Название новости',
                 'description' => 'Текст новости',
                 'author' => 'Автор'
             ]);
 
-        $news->fill(
-            $request->only('category_id', 'title', 'author', 'description')
-        )->save();
-
-        if ($news->save()) {
-            return redirect()
-                ->route('admin.news.index')
-                ->with('success', 'Запись прошла успешно');
-        }
-
-        return back()
-            ->with('error', 'При записи произошла ошибка')
-            ->withInput();
+        return json_encode(['created' => 'запись прошла успешно']);
     }
 
     /**
@@ -89,14 +82,17 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(News $news)
+    public function edit(int $id)
     {
+        $news = new News();
+        $category = new Category();
+
         return view('admin.news.edit')
-            ->with('news', News::all())
-            ->with('category', Category::all())
-            ->with('newsCount', count(News::all()))
-            ->with('categoryCount', count(Category::all()))
-            ->with('new', $news);
+            ->with('news', $news->getNews())
+            ->with('category', $category->getCategory())
+            ->with('newsCount', $news->countNews())
+            ->with('categoryCount', $category->countCategory())
+            ->with('new', $news->getNewOne($id));
     }
 
     /**
@@ -106,33 +102,9 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, News $news)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'title' => ['required', 'string', 'min:5'],
-            'description' => ['required', 'string', 'min:50'],
-            'author' => ['required', 'string', 'min:2']
-        ],[],
-            [
-                'title' => 'Название новости',
-                'description' => 'Текст новости',
-                'author' => 'Автор'
-            ]);
-
-        $news->fill(
-          $request->only('category_id', 'title', 'author', 'description')
-        )->save();
-
-        if ($news->save()) {
-            return redirect()
-                ->route('admin.news.index')
-                ->with('success', 'Обновление прошло успешно');
-        }
-
-        return back()
-            ->with('error', 'При обновление произошла ошибка')
-            ->withInput();
-
+        //
     }
 
     /**
@@ -141,18 +113,8 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(News $news)
+    public function destroy($id)
     {
-        $new = $news->delete();
-
-        if ($new) {
-            return redirect()
-                ->route('admin.news.index')
-                ->with('success', 'Удаление прошло успешно');
-        }
-
-        return back()
-            ->with('error', 'При удаление произошла ошибка')
-            ->withInput();
+        //
     }
 }

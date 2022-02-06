@@ -16,10 +16,13 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        $news = new News();
+        $category = new Category();
+
         return view('admin.category.index')
-            ->with('category', Category::withCount('news')->paginate(10))
-            ->with('newsCount', count(News::all()))
-            ->with('categoryCount', count(Category::all()));
+            ->with('category', $category->getCategory())
+            ->with('newsCount', $news->countNews())
+            ->with('categoryCount', $category->countCategory());
     }
 
     /**
@@ -29,9 +32,12 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        $news = new News();
+        $category = new Category();
+
         return view('admin.category.create')
-            ->with('newsCount', count(News::all()))
-            ->with('categoryCount', count(Category::all()));
+            ->with('newsCount', $news->countNews())
+            ->with('categoryCount', $category->countCategory());
     }
 
     /**
@@ -40,7 +46,7 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Category $category)
+    public function store(Request $request)
     {
         $request->validate([
             'title' => ['required', 'string', 'min:3'],
@@ -50,20 +56,7 @@ class CategoryController extends Controller
                 'title' => 'Название категории',
                 'slag' => 'имя URL'
             ]);
-
-        $category->fill(
-            $request->only(['title', 'slag'])
-        )->save();
-
-        if ($category->save()) {
-            return redirect()
-                ->route('admin.category.index')
-                ->with('success', 'Создание категории прошло успешно');
-        }
-
-        return back()
-            ->with('error', 'При создание категории произошла ошибка')
-            ->withInput();
+        return json_encode(['created' => 'запись прошла успешно']);
     }
 
     /**
@@ -83,12 +76,15 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit(int $id)
     {
+        $news = new News();
+        $category = new Category();
+
         return view('admin.category.edit')
-            ->with('category', $category)
-            ->with('newsCount', count(News::all()))
-            ->with('categoryCount', count(Category::all()));
+            ->with('category', $category->getCategoryOne($id))
+            ->with('newsCount', $news->countNews())
+            ->with('categoryCount', $category->countCategory());
     }
 
     /**
@@ -98,30 +94,9 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'title' => ['required', 'string', 'min:3'],
-            'slag' => ['required', 'string', 'min:3']
-        ],[],
-            [
-                'title' => 'Название категории',
-                'slag' => 'имя URL'
-            ]);
-
-        $category->fill(
-            $request->only(['title', 'slag'])
-        )->save();
-
-        if ($category->save()) {
-            return redirect()
-                ->route('admin.category.index')
-                ->with('success', 'Обновление прошло успешно');
-        }
-
-        return back()
-            ->with('error', 'При обновление произошла ошибка')
-            ->withInput();
+        //
     }
 
     /**
@@ -130,18 +105,8 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        $categorise = $category->delete();
-
-        if ($categorise) {
-            return redirect()
-                ->route('admin.category.index')
-                ->with('success', 'Удаление прошло успешно');
-        }
-
-        return back()
-            ->with('error', 'При удаление произошла ошибка')
-            ->withInput();
+        //
     }
 }
