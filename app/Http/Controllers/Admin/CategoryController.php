@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Category\CategoryCreateRequest;
+use App\Http\Requests\Admin\Category\CategoryUpdateRequest;
 use App\Models\Category;
-use App\Models\News;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -16,13 +17,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $news = new News();
-        $category = new Category();
-
         return view('admin.category.index')
-            ->with('category', $category->getCategory())
-            ->with('newsCount', $news->countNews())
-            ->with('categoryCount', $category->countCategory());
+            ->with('category', Category::withCount('news')->paginate(10));
     }
 
     /**
@@ -32,12 +28,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $news = new News();
-        $category = new Category();
-
-        return view('admin.category.create')
-            ->with('newsCount', $news->countNews())
-            ->with('categoryCount', $category->countCategory());
+        return view('admin.category.create');
     }
 
     /**
@@ -46,17 +37,19 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryCreateRequest $request, Category $category)
     {
-        $request->validate([
-            'title' => ['required', 'string', 'min:3'],
-            'slag' => ['required', 'string', 'min:3']
-        ],[],
-            [
-                'title' => 'Название категории',
-                'slag' => 'имя URL'
-            ]);
-        return json_encode(['created' => 'запись прошла успешно']);
+        $category->fill($request->validated())->save();
+
+        if ($category->save()) {
+            return redirect()
+                ->route('admin.category.index')
+                ->with('success', __('messages.admin.category.create.success'));
+        }
+
+        return back()
+            ->with('error', __('messages.admin.category.create.fail'))
+            ->withInput();
     }
 
     /**
@@ -76,15 +69,10 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(int $id)
+    public function edit(Category $category)
     {
-        $news = new News();
-        $category = new Category();
-
         return view('admin.category.edit')
-            ->with('category', $category->getCategoryOne($id))
-            ->with('newsCount', $news->countNews())
-            ->with('categoryCount', $category->countCategory());
+            ->with('category', $category);
     }
 
     /**
@@ -94,9 +82,19 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryUpdateRequest $request, Category $category)
     {
-        //
+        $category->fill($request->validated())->save();
+
+        if ($category->save()) {
+            return redirect()
+                ->route('admin.category.index')
+                ->with('success', __('messages.admin.category.update.success'));
+        }
+
+        return back()
+            ->with('error', __('messages.admin.category.update.fail'))
+            ->withInput();
     }
 
     /**
@@ -105,8 +103,18 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        //
+        $categorise = $category->delete();
+
+        if ($categorise) {
+            return redirect()
+                ->route('admin.category.index')
+                ->with('success', __('messages.admin.category.delete.success'));
+        }
+
+        return back()
+            ->with('error', __('messages.admin.category.delete.fail'))
+            ->withInput();
     }
 }

@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\News\NewsCreateRequest;
+use App\Http\Requests\Admin\News\NewsUpdateRequest;
 use App\Models\Category;
 use App\Models\News;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 
 class NewsController extends Controller
 {
@@ -17,14 +18,8 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $news = new News();
-        $category = new Category();
-
         return view('admin.news.index')
-            ->with('news', $news->getNews())
-            ->with('category', $category->getCategory())
-            ->with('newsCount', $news->countNews())
-            ->with('categoryCount', $category->countCategory());
+            ->with('news', News::with('category')->paginate(10));
     }
 
     /**
@@ -34,13 +29,8 @@ class NewsController extends Controller
      */
     public function create()
     {
-        $news = new News();
-        $category = new Category();
-
         return view('admin.news.create')
-            ->with('category', $category->getCategory())
-            ->with('newsCount', $news->countNews())
-            ->with('categoryCount', $category->countCategory());
+            ->with('category', Category::all());
     }
 
     /**
@@ -49,20 +39,19 @@ class NewsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NewsCreateRequest $request, News $news)
     {
-        $request->validate([
-            'title' => ['required', 'string', 'min:5'],
-            'description' => ['required', 'string', 'min:50'],
-            'author' => ['required', 'string', 'min:2']
-        ],[],
-            [
-                'title' => 'Название новости',
-                'description' => 'Текст новости',
-                'author' => 'Автор'
-            ]);
+        $news->fill($request->validated())->save();
 
-        return json_encode(['created' => 'запись прошла успешно']);
+        if ($news->save()) {
+            return redirect()
+                ->route('admin.news.index')
+                ->with('success', __('messages.admin.news.create.success'));
+        }
+
+        return back()
+            ->with('error', __('messages.admin.news.create.fail'))
+            ->withInput();
     }
 
     /**
@@ -82,17 +71,11 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(int $id)
+    public function edit(News $news)
     {
-        $news = new News();
-        $category = new Category();
-
         return view('admin.news.edit')
-            ->with('news', $news->getNews())
-            ->with('category', $category->getCategory())
-            ->with('newsCount', $news->countNews())
-            ->with('categoryCount', $category->countCategory())
-            ->with('new', $news->getNewOne($id));
+            ->with('new', $news)
+            ->with('category', Category::all());
     }
 
     /**
@@ -102,9 +85,20 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(NewsUpdateRequest $request, News $news)
     {
-        //
+        $news->fill($request->validated())->save();
+
+        if ($news->save()) {
+            return redirect()
+                ->route('admin.news.index')
+                ->with('success', __('messages.admin.news.update.success'));
+        }
+
+        return back()
+            ->with('error', __('messages.admin.news.update.fail'))
+            ->withInput();
+
     }
 
     /**
@@ -113,8 +107,18 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(News $news)
     {
-        //
+        $new = $news->delete();
+
+        if ($new) {
+            return redirect()
+                ->route('admin.news.index')
+                ->with('success', __('messages.admin.news.delete.success'));
+        }
+
+        return back()
+            ->with('error', __('messages.admin.news.delete.fail'))
+            ->withInput();
     }
 }
